@@ -19,6 +19,11 @@ import java.util.List;
 
 public class RSSFeedParser {
 
+    /***
+     * Reads the feeds of the rss.
+     * @param body The rss as xml.
+     * @return A list of ArticleItem
+     */
     public List<ArticleItem> readFeeds(String body) {
         List<ArticleItem> articleItemList = new ArrayList<>();
         try {
@@ -57,6 +62,12 @@ public class RSSFeedParser {
         return articleItemList;
     }
 
+    /***
+     * Gets the value of the xml node as String
+     * @param eventReader The xml event reader
+     * @return The node value as String
+     * @throws XMLStreamException
+     */
     private String getCharacterData(XMLEventReader eventReader) throws
             XMLStreamException {
         String result = "";
@@ -67,6 +78,13 @@ public class RSSFeedParser {
         return result;
     }
 
+    /***
+     * Sets for the fields a value for the target object.
+     * Needs some checks for edge cases.
+     * @param fields Which needs to be set
+     * @param target The Object which contains the fields
+     * @param value The value to what the fields will be set
+     */
     private void setValueForFields(List<Field> fields, Object target,
                                    Object value) {
         try {
