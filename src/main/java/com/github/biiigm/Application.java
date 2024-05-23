@@ -19,12 +19,20 @@ public class Application {
         BufferedReader reader =
                 new BufferedReader(new InputStreamReader(System.in));
 
+        System.out.println("Enter an URL: ");
         Document doc = Jsoup.connect(reader.readLine()).get();
-        List<String> rssLinks = doc.select("link").stream().filter(node ->
-                "application/rss+xml".equals(node.attr("type"))).map(element -> element.attr("href")).toList();
+        List<String> rssLinks = doc.select("link")
+                .stream()
+                .filter(node ->
+                        "application/rss+xml".equals(node.attr("type")))
+                .map(element -> element.attr("href"))
+                .toList();
 
         HttpRequest request =
-                HttpRequest.newBuilder().GET().uri(URI.create(rssLinks.get(0))).build();
+                HttpRequest.newBuilder()
+                        .GET()
+                        .uri(URI.create(rssLinks.get(0)))
+                        .build();
 
         try {
             HttpClient client = HttpClient.newHttpClient();
