@@ -20,7 +20,8 @@ public class Application {
                 new BufferedReader(new InputStreamReader(System.in));
 
         System.out.println("Enter an URL: ");
-        Document doc = Jsoup.connect(getUrl(reader.readLine())).get();
+        Document doc = Jsoup.connect(
+                getUrlWithProtocolStandard(reader.readLine())).get();
         List<String> rssLinks = doc.select("link")
                 .stream()
                 .filter(node ->
@@ -47,7 +48,7 @@ public class Application {
         }
     }
 
-    private static String getUrl(String url) {
+    private static String getUrlWithProtocolStandard(String url) {
         if (url.startsWith("http://") || url.startsWith("https://")) {
             return url;
         }
