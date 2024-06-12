@@ -29,31 +29,29 @@ public class RSSFeedParser {
         try {
             ArticleItem articleItem = new ArticleItem();
             String baseItem = articleItem.getClass()
-                    .getAnnotation(XMLClass.class)
-                    .name();
+                    .getAnnotation(XMLClass.class).name();
 
             XMLInputFactory inputFactory = XMLInputFactory.newInstance();
-            InputStream in = new ByteArrayInputStream(
-                    body.getBytes(StandardCharsets.UTF_8));
+            InputStream in =
+                    new ByteArrayInputStream(body.getBytes(StandardCharsets.UTF_8));
             XMLEventReader eventReader = inputFactory.createXMLEventReader(in);
             while (eventReader.hasNext()) {
                 XMLEvent event = eventReader.nextEvent();
                 if (event.isStartElement()) {
-                    String localPart = event.asStartElement()
-                            .getName()
+                    String localPart = event.asStartElement().getName()
                             .getLocalPart();
-                    List<Field> fields = Arrays.stream(
-                                    ArticleItem.class.getDeclaredFields())
-                            .filter(field -> localPart.equals(
-                                    field.getAnnotation(XMLNode.class).name()))
-                            .toList();
+                    List<Field> fields =
+                            Arrays.stream(ArticleItem.class.getDeclaredFields())
+                            .filter(field -> localPart.equals(field.getAnnotation(XMLNode.class)
+                                    .name())).toList();
                     if (!fields.isEmpty()) {
                         setValueForFields(fields, articleItem,
                                 getCharacterData(eventReader));
                     }
-                } else if (event.isEndElement() && baseItem.equals(
-                        event.asEndElement().getName().getLocalPart())) {
+                } else if (event.isEndElement() && baseItem.equals(event.asEndElement()
+                        .getName().getLocalPart())) {
                     articleItemList.add(articleItem);
+                    articleItem = new ArticleItem();
                 }
             }
         } catch (XMLStreamException e) {
@@ -68,8 +66,7 @@ public class RSSFeedParser {
      * @return The node value as String
      * @throws XMLStreamException
      */
-    private String getCharacterData(XMLEventReader eventReader) throws
-            XMLStreamException {
+    private String getCharacterData(XMLEventReader eventReader) throws XMLStreamException {
         String result = "";
         XMLEvent event = eventReader.nextEvent();
         if (event instanceof Characters) {
@@ -89,8 +86,7 @@ public class RSSFeedParser {
                                    Object value) {
         try {
             for (Field field : fields) {
-                String fieldName = "set" + field.getName()
-                        .substring(0, 1)
+                String fieldName = "set" + field.getName().substring(0, 1)
                         .toUpperCase() + field.getName().substring(1);
                 Method method = target.getClass()
                         .getMethod(fieldName, field.getType());
